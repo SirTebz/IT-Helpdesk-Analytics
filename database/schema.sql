@@ -1,0 +1,8 @@
+-- SQL Server logical schema; SQLite development database is created by the pipeline.
+CREATE TABLE Departments (DepartmentID INT IDENTITY PRIMARY KEY, DepartmentName NVARCHAR(100) NOT NULL UNIQUE, Location NVARCHAR(100));
+CREATE TABLE Categories (CategoryID INT IDENTITY PRIMARY KEY, CategoryName NVARCHAR(100) NOT NULL UNIQUE);
+CREATE TABLE SubCategories (SubCategoryID INT IDENTITY PRIMARY KEY, CategoryID INT NOT NULL REFERENCES Categories(CategoryID), SubCategoryName NVARCHAR(100) NOT NULL);
+CREATE TABLE Technicians (TechnicianID INT IDENTITY PRIMARY KEY, TechnicianName NVARCHAR(100) NOT NULL, Team NVARCHAR(100), Role NVARCHAR(100), Active BIT NOT NULL DEFAULT 1);
+CREATE TABLE SLA (SLAID INT IDENTITY PRIMARY KEY, Priority NVARCHAR(20) NOT NULL UNIQUE, TargetFirstResponseHours DECIMAL(10,2) NOT NULL, TargetResolutionHours DECIMAL(10,2) NOT NULL);
+CREATE TABLE Tickets (TicketID NVARCHAR(20) PRIMARY KEY, CreatedDate DATETIME2 NOT NULL, FirstResponseDate DATETIME2, ResolvedDate DATETIME2, ClosedDate DATETIME2, DepartmentID INT NOT NULL REFERENCES Departments(DepartmentID), CategoryID INT NOT NULL REFERENCES Categories(CategoryID), SubCategoryID INT REFERENCES SubCategories(SubCategoryID), TechnicianID INT REFERENCES Technicians(TechnicianID), Priority NVARCHAR(20) NOT NULL, Status NVARCHAR(30) NOT NULL, Subject NVARCHAR(250), Description NVARCHAR(MAX), SLAID INT REFERENCES SLA(SLAID), ResolutionCode NVARCHAR(100), CustomerSatisfactionScore TINYINT);
+CREATE TABLE CustomerFeedback (FeedbackID INT IDENTITY PRIMARY KEY, TicketID NVARCHAR(20) NOT NULL REFERENCES Tickets(TicketID), Rating TINYINT NOT NULL CHECK (Rating BETWEEN 1 AND 5), FeedbackDate DATETIME2 NOT NULL, Comments NVARCHAR(500));
