@@ -48,7 +48,8 @@ elif page in ["SLA Analysis","Technician Analysis","Department Analysis","Catego
     if page=="Customer Satisfaction": plot(data.dropna(subset=["CustomerSatisfactionScore"]).groupby("CustomerSatisfactionScore").size().reset_index(name="Tickets"),"CustomerSatisfactionScore","Tickets","Rating distribution")
 elif page=="Data Quality":
     st.title("Data quality"); _,report=validate(df)
-    for c,(name,value) in zip(st.columns(4),report.attrs["summary"].items()): c.metric(name,value)
+    metric_columns=st.columns(4)
+    for index,(name,value) in enumerate(report.attrs["summary"].items()): metric_columns[index % 4].metric(name,value)
     st.dataframe(report,use_container_width=True); st.download_button("Download validation report",report.to_csv(index=False),"data_quality_report.csv")
 elif page=="Data Explorer":
     st.title("Data explorer"); st.dataframe(data.head(st.slider("Preview rows",10,500,100)),use_container_width=True); st.dataframe(pd.DataFrame({"Column":data.columns,"Data type":data.dtypes.astype(str)}),use_container_width=True); st.download_button("Download filtered data",data.to_csv(index=False),"helpdesk_export.csv")
