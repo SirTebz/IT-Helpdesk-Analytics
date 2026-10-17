@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 data/helpdesk.db
 data/raw/*.csv
+data/processed/*.csv
+data/processed/*.xlsx
