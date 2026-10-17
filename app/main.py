@@ -18,9 +18,10 @@ start,end=st.sidebar.date_input("Date range",(df.CreatedDate.min().date(),df.Cre
 filters={c:st.sidebar.multiselect(c,sorted(df[c].dropna().unique())) for c in ["Department","Category","Priority","Status","Technician"]}
 if st.sidebar.button("Reset filters"): st.rerun()
 data=filtered(df,start,end,filters)
-def plot(x,y,title,line=False):
-    if data.empty: return st.info("No records match current filters.")
-    fig=px.line(x,x=x,y=y,title=title,markers=True) if line else px.bar(x,x=x,y=y,title=title); st.plotly_chart(fig,use_container_width=True)
+def plot(frame,x,y,title,line=False):
+    if frame.empty: return st.info("No records match current filters.")
+    fig=px.line(frame,x=x,y=y,title=title,markers=True) if line else px.bar(frame,x=x,y=y,title=title)
+    st.plotly_chart(fig,use_container_width=True)
 def cards(d):
     k=kpis(d); vals=[("Total Tickets",f"{k['Total Tickets']:,}"),("Open Tickets",f"{k['Open Tickets']:,}"),("Resolved Tickets",f"{k['Resolved Tickets']:,}"),("SLA Compliance",f"{k['SLA Compliance']:.1%}"),("Avg Resolution",f"{k['Avg Resolution Time']:.1f} h"),("Satisfaction",f"{k['Customer Satisfaction']:.1f} / 5")]
     for col,(name,val) in zip(st.columns(6),vals): col.metric(name,val)
