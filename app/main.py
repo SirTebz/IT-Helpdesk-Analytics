@@ -8,7 +8,17 @@ from app.data import ensure_data,validate
 from app.analytics import filtered,kpis,grouped,insights
 
 st.set_page_config(page_title="IT Helpdesk Analytics",page_icon="🎫",layout="wide")
-st.markdown("<style>.block-container{padding-top:1.5rem}.stMetric{background:#f5f7fb;padding:12px;border-radius:8px}</style>",unsafe_allow_html=True)
+st.markdown("""<style>
+    .block-container { padding-top: 1.5rem; }
+    div[data-testid="stMetric"] {
+        background: #171d2a;
+        border: 1px solid #2b3547;
+        border-radius: 10px;
+        padding: 14px;
+    }
+    div[data-testid="stMetricLabel"] p { color: #b9c3d2 !important; }
+    div[data-testid="stMetricValue"] { color: #f8fafc !important; }
+</style>""", unsafe_allow_html=True)
 @st.cache_data
 def load_data(): return ensure_data()
 df=load_data(); st.sidebar.title("IT Helpdesk Analytics")
